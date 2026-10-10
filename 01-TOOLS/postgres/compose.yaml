@@ -1,0 +1,40 @@
+# PostgreSQL para el Clinics Appointments Management System (Laravel + Filament).
+#
+# Levanta una instancia PostgreSQL 16 aislada con volumen persistente.
+# El esquema NO se define aquí: las tablas las crea Laravel con
+# `php artisan migrate` (ver README.md).
+#
+# Uso (desde este directorio):
+#   cp .env.example .env      # y ajusta la contraseña
+#   docker compose up -d
+#   ./test_connection.sh
+
+name: clinics-db
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: clinics_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Subcarpeta propia para no ensuciar el punto de montaje del volumen.
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      # Host:contenedor. Cambia POSTGRES_PORT en .env si el 5432 está ocupado.
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  # Nombre fijo y explícito: sobrevive a `docker compose down` (borrado solo con -v).
+  postgres_data:
+    name: clinics_postgres_data
