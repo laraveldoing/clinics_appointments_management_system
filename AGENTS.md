@@ -14,7 +14,8 @@ are the one piece guaranteed to be present before any other skill is matched. Tw
 
 ## 1. The decisor: classify the turn before acting
 
-Every turn takes one of three lanes, and you name the one you took in a line.
+Every turn takes one of three lanes, and you name the one you took in a line, in the person's
+language (the lane names are labels to translate).
 
 **Answer** — the request asks for information: explain, compare, investigate, audit, review,
 recommend. Read-only: write nothing, create no artifact, delegate no writer. Asking you to *think
@@ -23,9 +24,9 @@ intent is ambiguous, ask one question and stay here — ambiguity slows the lane
 
 **You choose the lane; never hand that choice to the person.** Simple → **FTD**: one feature document
 in `02-DOCS` (intent, scope, checklist, evidence, next step), tasks checked off against observed proof.
-Big, or decisions that affect each other → **SDD**: enter the chain; the person approves the spec and
+Big, or decisions that affect each other → **ASDD**: enter the chain; the person approves the spec and
 clarify, then picks manual or autopilot. Say which and why in one line; switch if asked.
-→ `../ftd/SKILL.md` · `../sdd/SKILL.md`.
+→ `../ftd/SKILL.md` · `../asdd/SKILL.md`.
 
 **Where.** Default branch open (chosen at install, or nothing complex) → work on it, no branch
 question. Closed («ramas y PR», CI, team) → before each code change ask: this branch, a new one, or
@@ -34,9 +35,9 @@ question. Closed («ramas y PR», CI, team) → before each code change ask: thi
 Judge the **meaning**, not the wording: the trigger is semantic in any language. A bug fix restoring
 intended behaviour is `debug`. Autopilot consent covers a whole run — advance without re-asking.
 
-Lane's skill missing? Offer it (§2) first. SDD recorded as deferred in `.rsc.json`? Run
+Lane's skill missing? Offer it (§2) first. ASDD recorded as deferred in `.rsc.json`? Run
 `npx @ericrisco/rsc@latest reassess`; silent on `RSC_REASSESSMENT_NO_CHANGE`, and on new evidence
-show the plan command — SDD still needs a newly accepted plan id, never added silently.
+show the plan command — ASDD needs a newly accepted plan id, never added silently.
 
 ---
 
@@ -49,19 +50,17 @@ name it and offer it. This runs mid-conversation, not only at project start.
 1. `npx @ericrisco/rsc catalog --available` lists every not-installed skill as
    `id  available  short description`.
 2. Pick the single best fit **by meaning**, the way you would match a request to a teammate's
-   expertise — "mandar emails de bienvenida" → an email/outreach skill, though not one keyword
-   overlaps. If nothing genuinely fits, say so
-   and move on: a tangential suggestion is worse than none.
+   expertise, even when no keyword overlaps. If nothing genuinely fits, say so and move on: a
+   tangential suggestion is worse than none.
 3. Ask once, plainly: "Para esto instalaría `<id>`, que aún no tienes. ¿La instalo? (sí/no)".
 4. On yes, run `npx @ericrisco/rsc add <id>`, then continue the original task.
 
-Installing changes the user's environment, so it is always their call. One suggestion at a time,
+One suggestion at a time,
 and never to interrupt a flow with a nice-to-have. Never recommend something already installed
 (`npx @ericrisco/rsc list`).
 
-`npx @ericrisco/rsc consult "<task>"` is a **lexical** hint only: it keyword-matches, and returns
-nothing for natural-language or non-English intent. Never let it decide, and never read its silence
-as "no skill exists" — the catalog plus your judgment is the source of truth.
+`npx @ericrisco/rsc consult "<task>"` is a **lexical** hint only: it misses natural-language and
+non-English intent. Its silence never means "no skill exists"; the catalog plus your judgment decides.
 
 ### Automation gap — after the work
 
@@ -73,9 +72,8 @@ Not covered → one line, skill or agent. Rules: `skill-scout`.
 
 ## 3. A harness that is broken fixes itself
 
-You are injected into every session, so you are the only thing that can notice a broken
-harness before its owner does — and its owner usually cannot, because the symptoms name
-nothing they recognise. When any of these is true, act on it **once** in the session:
+Its owner rarely notices: the symptoms name nothing they know. When any of these
+is true, act on it **once** in the session:
 
 - `.rsc.json` exists and what it declares is not what is installed;
 - the same hook seems to run several times;
@@ -95,7 +93,7 @@ a cause. Then:
   teammate added, disarming a gate — **ask first**. A `git pull` never rewrites someone's
   machine.
 
-Offer once per session. Never mention any of it when the harness is healthy.
+Offer once per session; say nothing when the harness is healthy.
 
 ## 4. First contact
 
@@ -108,6 +106,12 @@ Before handling the first request of a session, check the workspace:
 - The user declines a harness here ("sin harness", "solo código") → create an empty
   `.rsc/.no-harness`, confirm in one line, and never auto-start `init` in this repo again.
 - With a profile, this gate is inert. Never re-onboard.
+
+## 5. «Recuerda esto»
+
+A project or business fact goes to its topic page in `02-DOCS/wiki/` (link a new page from
+`wiki/index.md`); say the path. Your own memory sits outside the project, unseen by person and
+team: keep there only how this person likes you to work (or all, without `02-DOCS/`).
 
 ## Explain without assuming
 

@@ -74,8 +74,6 @@ auth.json
 .clinerules/workflows/specify.md
 .clinerules/workflows/tasks.md
 .clinerules/workflows/verify.md
-
-# rsc local state (hooks, seals, logs) and managed skill links — machine-local
 .opencode/rsc/analyze
 .opencode/rsc/automation-strategy
 .opencode/rsc/clarify
@@ -126,6 +124,15 @@ auth.json
 .opencode/commands/specify.md
 .opencode/commands/tasks.md
 .opencode/commands/verify.md
-
-# rsc local state (hooks, seals, logs) and managed skill links — machine-local
 .worktrees/
+.clinerules/rsc/connect-tool
+.clinerules/rsc/design
+.clinerules/rsc/ux
+.clinerules/rsc/tidy
+.clinerules/rsc/asdd
+.opencode/rsc/connect-tool
+.opencode/rsc/design
+.opencode/rsc/ux
+.opencode/rsc/tidy
+.opencode/rsc/asdd
+.opencode/agents/finding-verifier.md
