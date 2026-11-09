@@ -4,7 +4,18 @@
 
 @section('content')
     <div class="card">
-        <h1 style="font-size:1.25rem;font-weight:600;margin-top:0;margin-bottom:1rem;">Citas</h1>
+        @if (session('status'))
+            <div role="status" style="background:#f0fdf4;color:#166534;border-radius:.375rem;padding:.75rem;margin-bottom:1rem;">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+            <h1 style="font-size:1.25rem;font-weight:600;margin:0;">Citas</h1>
+            <a href="{{ route('appointments.create') }}" style="background:#0f172a;color:#fff;border-radius:.375rem;padding:.5rem .75rem;font-size:.875rem;font-weight:600;text-decoration:none;">
+                Nueva cita
+            </a>
+        </div>
 
         @if ($appointments->total() === 0)
             <p style="color:#475569;">No hay citas registradas en tu clínica.</p>
