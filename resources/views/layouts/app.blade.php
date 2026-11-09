@@ -7,13 +7,13 @@
 
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @else
-            <style>
-                body { margin: 0; font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; }
-                .container { max-width: 72rem; margin: 0 auto; padding: 1.5rem; }
-                .card { background: #fff; border-radius: .5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, .1); padding: 1.5rem; }
-            </style>
         @endif
+
+        <style>
+            body { margin: 0; font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a; }
+            .container { max-width: 72rem; margin: 0 auto; padding: 1.5rem; }
+            .card { background: #fff; border-radius: .5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, .1); padding: 1.5rem; }
+        </style>
     </head>
     <body>
         <div class="container">

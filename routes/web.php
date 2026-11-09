@@ -5,7 +5,9 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return auth()->check()
+        ? redirect()->route('appointments.index')
+        : view('welcome');
 });
 
 Route::middleware('guest')->group(function (): void {

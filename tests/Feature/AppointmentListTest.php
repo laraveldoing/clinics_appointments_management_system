@@ -18,6 +18,13 @@ class AppointmentListTest extends TestCase
         $this->get('/appointments')->assertRedirect(route('login'));
     }
 
+    public function test_authenticated_users_are_sent_from_the_home_page_to_the_list(): void
+    {
+        $user = User::factory()->for(Clinic::factory())->create();
+
+        $this->actingAs($user)->get('/')->assertRedirect(route('appointments.index'));
+    }
+
     public function test_users_see_every_appointment_of_their_clinic_but_not_other_clinics(): void
     {
         $ownClinic = Clinic::factory()->create();
