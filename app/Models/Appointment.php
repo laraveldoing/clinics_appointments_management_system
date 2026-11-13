@@ -41,6 +41,21 @@ class Appointment extends Model
     }
 
     /**
+     * Etiqueta en español del estado de la cita.
+     */
+    public function statusLabel(): string
+    {
+        return match ($this->status) {
+            'scheduled' => 'Programada',
+            'confirmed' => 'Confirmada',
+            'completed' => 'Completada',
+            'cancelled' => 'Cancelada',
+            'no_show' => 'No asistió',
+            default => $this->status,
+        };
+    }
+
+    /**
      * Paciente citado.
      */
     public function patient(): BelongsTo
