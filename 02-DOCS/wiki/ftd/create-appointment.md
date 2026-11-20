@@ -1,7 +1,7 @@
 ---
 author: José Raúl Miranda Prieto
 branch: feature/create-appointment
-status: in-progress
+status: completed
 ---
 # Crear una cita desde la interfaz
 
@@ -21,12 +21,13 @@ personal de la clínica necesita registrar una cita nueva sin tocar la consola.
 - Solo se ofrecen pacientes y doctores de la clínica del usuario.
 - Validación: paciente y doctor de la misma clínica, doctor con rol `doctor`, inicio futuro,
   duración permitida.
+- Se rechazan citas solapadas para el mismo médico o paciente; solo las citas `scheduled` y
+  `confirmed` reservan horario.
 - La cita se guarda con estado `scheduled` y `end_time` calculado.
 - Mensaje de confirmación al volver al listado.
 
 **Fuera:**
 - Editar, cancelar o reprogramar citas.
-- Detección de solapamientos entre citas.
 - Zona horaria configurable por clínica.
 - Notificaciones o recordatorios.
 - Crear pacientes o doctores desde este formulario.
@@ -37,6 +38,7 @@ personal de la clínica necesita registrar una cita nueva sin tocar la consola.
 - [x] Una cita válida se guarda con su clínica, estado y `end_time` calculado — test `test_user_can_create_an_appointment_with_a_computed_end_time`.
 - [x] Un paciente de otra clínica es rechazado — test `test_patient_from_another_clinic_is_rejected`.
 - [x] Un doctor de otra clínica o con rol distinto es rechazado — tests `test_doctor_from_another_clinic_is_rejected` y `test_user_without_doctor_role_cannot_be_assigned`.
+- [x] Se rechazan solapamientos activos para médico o paciente y se permiten intervalos contiguos — `AppointmentConflictTest`.
 - [x] Una fecha pasada es rechazada — test `test_start_time_must_be_in_the_future`.
 - [x] Un invitado no puede abrir ni enviar el formulario — test `test_guests_cannot_open_the_form_or_store_an_appointment`.
 - [x] Formato limpio — `vendor/bin/pint --test` en verde sobre los archivos tocados.
@@ -51,5 +53,6 @@ personal de la clínica necesita registrar una cita nueva sin tocar la consola.
 
 ## Next
 
-Abrir el pull request apilado sobre `feature/appointments-list`.
+La feature base se integró en `main`. La prevención de solapamientos se amplía en
+[`../sdd/specs/appointment-overlaps.md`](../sdd/specs/appointment-overlaps.md).
 
