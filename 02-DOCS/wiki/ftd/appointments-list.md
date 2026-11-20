@@ -1,7 +1,7 @@
 ---
 author: José Raúl Miranda Prieto
 branch: feature/appointments-list
-status: in-progress
+status: completed
 ---
 # Login mínimo y listado de citas
 
@@ -52,4 +52,5 @@ Es el mínimo que respeta la constitución: no se exponen datos de pacientes sin
 
 ## Next
 
-Abrir el pull request y esperar aprobación humana (tier 2 no se auto-mergea).
+La feature se integró en `main`. La autorización por rol se implementó en la rama
+`feature/role-based-access`; consulta la [spec de autorización](../sdd/specs/role-based-access.md).
