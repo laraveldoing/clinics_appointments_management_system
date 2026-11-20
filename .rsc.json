@@ -21,11 +21,13 @@
     "idea-refinement",
     "implement",
     "init",
+    "laravel",
     "orient",
     "parallel",
     "plan",
     "review",
     "sdd-init",
+    "security-audit",
     "ship",
     "simplify-code",
     "source-grounded-development",
@@ -45,7 +47,7 @@
     "refuter-tests"
   ],
   "ownSkills": [],
-  "catalogVersion": "4.0.5",
+  "catalogVersion": "4.1.8",
   "tier": null,
   "optOuts": [
     "trunk-open"
@@ -923,8 +925,8 @@
       "opencode.json": "12b29cdc3740ace4cd04dd4d42b1e97691d77d156412dee25a86b7d17ba13fda"
     },
     "maintenanceDrift": {
-      "action": "add harness",
-      "recordedAt": "2026-10-06T22:19:27.747Z",
+      "action": "add laravel",
+      "recordedAt": "2026-11-20T19:01:53.402Z",
       "requiresReassessment": true
     }
   }

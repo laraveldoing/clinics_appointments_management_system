@@ -136,3 +136,9 @@ auth.json
 .opencode/rsc/tidy
 .opencode/rsc/asdd
 .opencode/agents/finding-verifier.md
+.clinerules/rsc/security-audit
+.clinerules/workflows/security-audit.md
+.opencode/rsc/security-audit
+.opencode/commands/security-audit.md
+.clinerules/rsc/laravel
+.opencode/rsc/laravel
