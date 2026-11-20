@@ -6,13 +6,13 @@ tags: [sdd, spec]
 timestamp: 2026-11-10T09:00:00Z
 topic: sdd
 slug: ci
-status: draft
-branch: chore/ci
+status: implemented
+branch: ci-quality-checks
 ---
 
 # Spec — Integración continua
 
-> Slug: `ci` · Status: draft · Created: 2026-11-10
+> Slug: `ci` · Status: implemented · Created: 2026-11-10
 > Inherits: [constitution](../constitution.md)
 
 ## Problem & why

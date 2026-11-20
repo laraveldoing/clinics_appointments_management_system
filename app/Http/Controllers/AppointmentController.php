@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -20,14 +21,23 @@ class AppointmentController extends Controller
      */
     public function index(Request $request): View
     {
-        $appointments = Appointment::query()
+        Gate::authorize('viewAny', Appointment::class);
+
+        $query = Appointment::query()
             ->with(['patient', 'doctor'])
-            ->orderBy('start_time')
-            ->paginate(15)
-            ->withQueryString();
+            ->orderBy('start_time');
+
+        if ($request->user()->role === 'doctor') {
+            $query->where('user_id', $request->user()->id);
+        }
+
+        $appointments = $query->paginate(15)->withQueryString();
 
         return view('appointments.index', [
             'appointments' => $appointments,
+            'emptyMessage' => $request->user()->role === 'doctor'
+                ? 'No tienes citas asignadas.'
+                : 'No hay citas registradas en tu clínica.',
         ]);
     }
 
@@ -36,6 +46,8 @@ class AppointmentController extends Controller
      */
     public function create(Request $request): View
     {
+        Gate::authorize('create', Appointment::class);
+
         return view('appointments.create', [
             'patients' => Patient::query()
                 ->orderBy('last_name')

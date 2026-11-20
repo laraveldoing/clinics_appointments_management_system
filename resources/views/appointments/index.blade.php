@@ -12,13 +12,15 @@
 
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
             <h1 style="font-size:1.25rem;font-weight:600;margin:0;">Citas</h1>
-            <a href="{{ route('appointments.create') }}" style="background:#0f172a;color:#fff;border-radius:.375rem;padding:.5rem .75rem;font-size:.875rem;font-weight:600;text-decoration:none;">
-                Nueva cita
-            </a>
+            @can('create', \App\Models\Appointment::class)
+                <a href="{{ route('appointments.create') }}" style="background:#0f172a;color:#fff;border-radius:.375rem;padding:.5rem .75rem;font-size:.875rem;font-weight:600;text-decoration:none;">
+                    Nueva cita
+                </a>
+            @endcan
         </div>
 
         @if ($appointments->total() === 0)
-            <p style="color:#475569;">No hay citas registradas en tu clínica.</p>
+            <p style="color:#475569;">{{ $emptyMessage }}</p>
         @elseif ($appointments->isEmpty())
             <p style="color:#475569;">Esta página no tiene resultados. Vuelve a la primera página.</p>
         @else

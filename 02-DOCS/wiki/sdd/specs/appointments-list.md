@@ -6,13 +6,13 @@ tags: [sdd, spec]
 timestamp: 2026-11-08T06:40:00Z
 topic: sdd
 slug: appointments-list
-status: draft
+status: implemented
 branch: feature/appointments-list
 ---
 
 # Spec — Login mínimo y listado de citas
 
-> Slug: `appointments-list` · Status: draft · Created: 2026-11-08
+> Slug: `appointments-list` · Status: implemented · Created: 2026-11-08
 > Inherits: [constitution](../constitution.md)
 
 ## Problem & why

@@ -30,7 +30,7 @@ class AppointmentListTest extends TestCase
         $ownClinic = Clinic::factory()->create();
         $otherClinic = Clinic::factory()->create();
 
-        $user = User::factory()->for($ownClinic)->create();
+        $user = User::factory()->receptionist()->for($ownClinic)->create();
         $colleague = User::factory()->for($ownClinic)->create();
         $otherUser = User::factory()->for($otherClinic)->create();
 
@@ -71,6 +71,7 @@ class AppointmentListTest extends TestCase
         $response->assertSee('Ana Propia');
         $response->assertSee('Diego Colega');
         $response->assertDontSee('Bruno Ajena');
+        $response->assertSee(route('appointments.create'));
     }
 
     public function test_list_shows_every_column_of_the_contract(): void
@@ -131,7 +132,7 @@ class AppointmentListTest extends TestCase
 
     public function test_list_shows_the_empty_state_when_there_are_no_appointments(): void
     {
-        $user = User::factory()->for(Clinic::factory())->create();
+        $user = User::factory()->receptionist()->for(Clinic::factory())->create();
 
         $response = $this->actingAs($user)->get('/appointments');
 
