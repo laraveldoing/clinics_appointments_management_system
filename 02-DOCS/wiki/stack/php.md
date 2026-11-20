@@ -4,6 +4,10 @@
 
 El proyecto usa PHP 8.3 como versión mínima declarada en `composer.json` y Laravel 13.x como framework base.
 
+Composer resuelve el lockfile con `config.platform.php` fijado en `8.3.0`. Esto hace que las
+dependencias bloqueadas sean compatibles con el mínimo declarado; no fija la versión real del
+runtime.
+
 ## Herramientas principales
 
 - Composer para gestión de dependencias.
@@ -15,10 +19,15 @@ El proyecto usa PHP 8.3 como versión mínima declarada en `composer.json` y Lar
 
 ```bash
 composer install
+composer validate --no-check-publish --no-interaction
+composer audit
 php artisan test
 vendor/bin/pint --test
 php artisan key:generate
 ```
+
+Para actualizar dependencias preservando el mínimo de PHP, revisar el diff de paquetes generado
+por `composer update --with-all-dependencies --minimal-changes` y ejecutar `composer audit`.
 
 ## Convenciones del proyecto
 
