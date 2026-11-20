@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AppointmentController extends Controller
@@ -54,16 +56,62 @@ class AppointmentController extends Controller
     {
         $data = $request->validated();
         $start = Carbon::parse($data['start_time']);
+        $end = $start->copy()->addMinutes((int) $data['duration_minutes']);
+        $clinicId = $request->user()->clinic_id;
 
-        Appointment::create([
-            'clinic_id' => $request->user()->clinic_id,
-            'patient_id' => $data['patient_id'],
-            'user_id' => $data['user_id'],
-            'start_time' => $start,
-            'end_time' => $start->copy()->addMinutes((int) $data['duration_minutes']),
-            'status' => 'scheduled',
-            'reason' => $data['reason'] ?? null,
-        ]);
+        DB::transaction(function () use ($data, $start, $end, $clinicId): void {
+            $patient = Patient::query()
+                ->where('clinic_id', $clinicId)
+                ->whereKey($data['patient_id'])
+                ->lockForUpdate()
+                ->first();
+
+            if ($patient === null) {
+                throw ValidationException::withMessages([
+                    'patient_id' => 'El paciente ya no está disponible en tu clínica.',
+                ]);
+            }
+
+            $doctor = User::query()
+                ->where('clinic_id', $clinicId)
+                ->where('role', 'doctor')
+                ->whereKey($data['user_id'])
+                ->lockForUpdate()
+                ->first();
+
+            if ($doctor === null) {
+                throw ValidationException::withMessages([
+                    'user_id' => 'El doctor ya no está disponible en tu clínica.',
+                ]);
+            }
+
+            $hasConflict = Appointment::query()
+                ->where('clinic_id', $clinicId)
+                ->whereIn('status', ['scheduled', 'confirmed'])
+                ->where(function ($query) use ($data): void {
+                    $query->where('user_id', $data['user_id'])
+                        ->orWhere('patient_id', $data['patient_id']);
+                })
+                ->where('start_time', '<', $end)
+                ->where('end_time', '>', $start)
+                ->exists();
+
+            if ($hasConflict) {
+                throw ValidationException::withMessages([
+                    'start_time' => 'El doctor o el paciente ya tiene una cita en ese horario.',
+                ]);
+            }
+
+            Appointment::create([
+                'clinic_id' => $clinicId,
+                'patient_id' => $patient->id,
+                'user_id' => $doctor->id,
+                'start_time' => $start,
+                'end_time' => $end,
+                'status' => 'scheduled',
+                'reason' => $data['reason'] ?? null,
+            ]);
+        });
 
         return redirect()
             ->route('appointments.index')
