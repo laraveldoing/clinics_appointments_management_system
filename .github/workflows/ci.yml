@@ -55,8 +55,6 @@ jobs:
 
   e2e:
     name: e2e
-  php83-compatibility:
-    name: php83-compatibility
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -90,6 +88,21 @@ jobs:
 
       - name: Run E2E test
         run: npm run test:e2e
+
+  php83-compatibility:
+    name: php83-compatibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
           php-version: '8.3'
           extensions: mbstring, pdo_sqlite, sqlite3
           coverage: none
