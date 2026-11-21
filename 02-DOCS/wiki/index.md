@@ -16,3 +16,6 @@
 ## testing/
 
 - [Pruebas End-to-End](./testing/e2e.md)
+- [Spec: actualización de dependencias vulnerables](./sdd/specs/security-dependency-updates.md)
+- [Plan: actualización de dependencias vulnerables](./sdd/plans/security-dependency-updates.md)
+- [Análisis: actualización de dependencias vulnerables](./sdd/analysis/security-dependency-updates.md)
