@@ -29,12 +29,23 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@clinica.test',
         ]);
 
+        User::factory()->receptionist()->for($clinic)->create([
+            'name' => 'Recepcionista Demo',
+            'email' => 'recepcionista@clinica.test',
+        ]);
+
         $doctor = User::factory()->doctor()->for($clinic)->create([
             'name' => 'Doctor Demo',
             'email' => 'doctor@clinica.test',
         ]);
 
-        Patient::factory()->count(5)->for($clinic)->create();
+        Patient::factory()->for($clinic)->create([
+            'first_name' => 'Paciente',
+            'last_name' => 'E2E',
+            'email' => 'paciente-e2e@clinica.test',
+        ]);
+
+        Patient::factory()->count(4)->for($clinic)->create();
 
         Appointment::factory()->count(5)->forClinic($clinic)->create([
             'user_id' => $doctor->id,

@@ -21,6 +21,8 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+/test-results/
+/playwright-report/
 
 /public/build
 /storage/pail
