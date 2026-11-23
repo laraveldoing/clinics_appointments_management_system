@@ -14,7 +14,7 @@ branch: chore/phpstan-quality-gate
 
 > Spec: [../specs/phpstan-quality-gate.md](../specs/phpstan-quality-gate.md) ·
 > Constitution: [../constitution.md](../constitution.md) · Status: implemented
-> Last updated: 2026-11-20
+> Last updated: 2026-11-23
 
 ## 0. Global constraints
 
@@ -162,11 +162,13 @@ There is no application data or runtime flow change.
 
 - `composer analyse` → PHPStan passed with zero errors at level 5.
 - A temporary invalid return type made PHPStan fail with `return.type`; the probe was removed.
-- `php artisan test` → 49 tests passed, 169 assertions.
+- `php artisan test --compact` → 48 tests passed, 168 assertions.
+- `phpunit.xml` no longer references the removed, empty `tests/Unit` directory.
 - `vendor/bin/pint --test` → passed.
 - `composer validate --no-check-publish --no-interaction` → valid.
 - `composer audit` → no known security advisories.
 - `git diff --check` → passed.
 
-The implementation is complete on `chore/phpstan-quality-gate`; it remains uncommitted and has no
-pull request yet.
+The implementation is committed on `chore/phpstan-quality-gate` (`02964b9`, `7369e37`). This branch
+will be published as a prerequisite pull request targeting `main`; the appointment-lifecycle pull
+request is stacked on it. Neither pull request will be merged without approval.
