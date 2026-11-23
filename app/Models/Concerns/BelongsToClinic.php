@@ -23,7 +23,7 @@ trait BelongsToClinic
         static::addGlobalScope('clinic', function (Builder $builder): void {
             $user = auth()->user();
 
-            if ($user !== null && $user->clinic_id !== null) {
+            if ($user !== null) {
                 $builder->where($builder->getModel()->getTable().'.clinic_id', $user->clinic_id);
             }
         });

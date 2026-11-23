@@ -51,7 +51,6 @@ class Appointment extends Model
             'completed' => 'Completada',
             'cancelled' => 'Cancelada',
             'no_show' => 'No asistió',
-            default => $this->status,
         };
     }
 

@@ -11,7 +11,9 @@ class AppointmentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['admin', 'doctor', 'receptionist'], true);
+        return match ($user->role) {
+            'admin', 'doctor', 'receptionist' => true,
+        };
     }
 
     /**

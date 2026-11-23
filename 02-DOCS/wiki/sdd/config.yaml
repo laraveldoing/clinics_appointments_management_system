@@ -35,6 +35,7 @@ testing:
       - composer validate --no-check-publish --no-interaction
       - composer audit
       - composer install --no-interaction --prefer-dist --no-progress
+      - composer analyse
       - php artisan test
       - vendor/bin/pint --test
 phase_rules:
