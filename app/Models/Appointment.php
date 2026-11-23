@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     'status',
     'reason',
     'reminder_sent_at',
+    'cancellation_note',
 ])]
 class Appointment extends Model
 {

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Appointment;
 use App\Models\User;
 
 class AppointmentPolicy
@@ -22,5 +23,22 @@ class AppointmentPolicy
     public function create(User $user): bool
     {
         return in_array($user->role, ['admin', 'receptionist'], true);
+    }
+
+    public function reschedule(User $user, Appointment $appointment): bool
+    {
+        return $this->manageLifecycle($user, $appointment);
+    }
+
+    public function cancel(User $user, Appointment $appointment): bool
+    {
+        return $this->manageLifecycle($user, $appointment);
+    }
+
+    private function manageLifecycle(User $user, Appointment $appointment): bool
+    {
+        return in_array($user->role, ['admin', 'receptionist'], true)
+            && $user->clinic_id === $appointment->clinic_id
+            && in_array($appointment->status, ['scheduled', 'confirmed'], true);
     }
 }

@@ -20,4 +20,12 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::get('/appointments/{appointment}/reschedule', [AppointmentController::class, 'editReschedule'])
+        ->name('appointments.reschedule.edit');
+    Route::put('/appointments/{appointment}/reschedule', [AppointmentController::class, 'updateReschedule'])
+        ->name('appointments.reschedule.update');
+    Route::get('/appointments/{appointment}/cancel', [AppointmentController::class, 'confirmCancellation'])
+        ->name('appointments.cancel.confirm');
+    Route::post('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
+        ->name('appointments.cancel.store');
 });
