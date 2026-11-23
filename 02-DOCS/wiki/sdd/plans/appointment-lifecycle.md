@@ -282,11 +282,10 @@ optional `cancellation_note`. Neither request can alter `clinic_id`, `patient_id
 
 - T001–T002 follow red-green: the focused tests failed before lifecycle routes and persistence
   existed, then passed after implementation.
-- `php artisan test --testsuite Feature --compact` → 69 passed, 1 PostgreSQL-only test skipped on
-  SQLite.
-- `APPOINTMENT_CONCURRENCY_TEST=1 ... php artisan test tests/Feature/AppointmentConcurrencyTest.php --compact`
-  → passed against an isolated, temporary PostgreSQL 16 container; two independent processes
-  attempted overlapping reschedules and exactly one committed.
+- `php artisan test --compact` → 69 passed, 1 PostgreSQL-only test skipped on SQLite.
+- `AppointmentConcurrencyTest` with `APPOINTMENT_CONCURRENCY_TEST=1` → passed against an isolated,
+  temporary PostgreSQL 16 container; two independent processes attempted overlapping reschedules
+  and exactly one committed.
 - `npm run test:e2e` → 2 Playwright tests passed, including create, reschedule and cancel.
 - `composer analyse` → passed with zero errors.
 - `vendor/bin/pint --test` → passed.
