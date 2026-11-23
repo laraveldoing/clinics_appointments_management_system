@@ -73,8 +73,7 @@ en la creación y reprogramación evita duplicación y mantiene el criterio apro
 
 ## Evidence after implementation
 
-- `php artisan test --testsuite Feature --compact` → 69 passed, 1 PostgreSQL-only test skipped on
-  SQLite.
+- `php artisan test --compact` → 69 passed, 1 PostgreSQL-only test skipped on SQLite.
 - PostgreSQL 16 concurrency integration → passed with two independent processes; one overlapping
   reschedule succeeded and the other was rejected without replacing the appointment.
 - Playwright E2E → 2 passed, covering appointment creation plus the reschedule/cancel user flow.
