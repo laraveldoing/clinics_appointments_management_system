@@ -33,6 +33,7 @@
                             <th scope="col" style="padding:.5rem;">Doctor</th>
                             <th scope="col" style="padding:.5rem;">Estado</th>
                             <th scope="col" style="padding:.5rem;">Motivo</th>
+                            <th scope="col" style="padding:.5rem;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,8 +42,21 @@
                                 <td style="padding:.5rem;white-space:nowrap;">{{ $appointment->start_time->format('d/m/Y H:i') }}</td>
                                 <td style="padding:.5rem;">{{ $appointment->patient?->full_name ?? '—' }}</td>
                                 <td style="padding:.5rem;">{{ $appointment->doctor?->name ?? '—' }}</td>
-                                <td style="padding:.5rem;">{{ $appointment->statusLabel() }}</td>
+                                <td style="padding:.5rem;">
+                                    {{ $appointment->statusLabel() }}
+                                    @if ($appointment->cancellation_note)
+                                        <p style="color:#475569;margin:.25rem 0 0;">Nota: {{ $appointment->cancellation_note }}</p>
+                                    @endif
+                                </td>
                                 <td style="padding:.5rem;">{{ $appointment->reason ?? '—' }}</td>
+                                <td style="padding:.5rem;white-space:nowrap;">
+                                    @can('reschedule', $appointment)
+                                        <a href="{{ route('appointments.reschedule.edit', $appointment) }}" style="color:#1d4ed8;">Reprogramar</a>
+                                    @endcan
+                                    @can('cancel', $appointment)
+                                        <a href="{{ route('appointments.cancel.confirm', $appointment) }}" style="color:#b91c1c;margin-left:.5rem;">Cancelar</a>
+                                    @endcan
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
