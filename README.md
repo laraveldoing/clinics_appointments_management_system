@@ -80,6 +80,14 @@ php artisan serve
 
 La aplicación quedará disponible en `http://localhost:8000`.
 
+En GitHub Codespaces, arranca el servidor escuchando en todas las interfaces para que el túnel pueda conectarse:
+
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+```
+
+Cuando `CODESPACES=true`, Laravel confía en las cabeceras del proxy de Codespaces para generar enlaces y recursos con el dominio y protocolo públicos. En otros entornos, la confianza en proxies no se activa automáticamente.
+
 ## Comandos útiles
 
 ```bash

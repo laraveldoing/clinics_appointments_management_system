@@ -144,3 +144,5 @@ auth.json
 .opencode/commands/security-audit.md
 .clinerules/rsc/laravel
 .opencode/rsc/laravel
+.clinerules/rsc/calendar-scheduling
+.opencode/rsc/calendar-scheduling

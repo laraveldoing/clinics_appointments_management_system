@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CancelAppointmentRequest;
+use App\Http\Requests\RescheduleAppointmentRequest;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\User;
+use App\Services\AppointmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AppointmentController extends Controller
@@ -64,69 +65,82 @@ class AppointmentController extends Controller
     /**
      * Guarda una cita nueva en la clínica del usuario.
      */
-    public function store(StoreAppointmentRequest $request): RedirectResponse
+    public function store(StoreAppointmentRequest $request, AppointmentService $service): RedirectResponse
     {
         $data = $request->validated();
-        $start = Carbon::parse($data['start_time']);
-        $end = $start->copy()->addMinutes((int) $data['duration_minutes']);
-        $clinicId = $request->user()->clinic_id;
-
-        DB::transaction(function () use ($data, $start, $end, $clinicId): void {
-            $patient = Patient::query()
-                ->where('clinic_id', $clinicId)
-                ->whereKey($data['patient_id'])
-                ->lockForUpdate()
-                ->first();
-
-            if ($patient === null) {
-                throw ValidationException::withMessages([
-                    'patient_id' => 'El paciente ya no está disponible en tu clínica.',
-                ]);
-            }
-
-            $doctor = User::query()
-                ->where('clinic_id', $clinicId)
-                ->where('role', 'doctor')
-                ->whereKey($data['user_id'])
-                ->lockForUpdate()
-                ->first();
-
-            if ($doctor === null) {
-                throw ValidationException::withMessages([
-                    'user_id' => 'El doctor ya no está disponible en tu clínica.',
-                ]);
-            }
-
-            $hasConflict = Appointment::query()
-                ->where('clinic_id', $clinicId)
-                ->whereIn('status', ['scheduled', 'confirmed'])
-                ->where(function ($query) use ($data): void {
-                    $query->where('user_id', $data['user_id'])
-                        ->orWhere('patient_id', $data['patient_id']);
-                })
-                ->where('start_time', '<', $end)
-                ->where('end_time', '>', $start)
-                ->exists();
-
-            if ($hasConflict) {
-                throw ValidationException::withMessages([
-                    'start_time' => 'El doctor o el paciente ya tiene una cita en ese horario.',
-                ]);
-            }
-
-            Appointment::create([
-                'clinic_id' => $clinicId,
-                'patient_id' => $patient->id,
-                'user_id' => $doctor->id,
-                'start_time' => $start,
-                'end_time' => $end,
-                'status' => 'scheduled',
-                'reason' => $data['reason'] ?? null,
-            ]);
-        });
+        $service->create(
+            (int) $request->user()->clinic_id,
+            (int) $data['patient_id'],
+            (int) $data['user_id'],
+            Carbon::parse((string) $data['start_time']),
+            (int) $data['duration_minutes'],
+            isset($data['reason']) ? (string) $data['reason'] : null,
+        );
 
         return redirect()
             ->route('appointments.index')
             ->with('status', 'Cita creada correctamente.');
+    }
+
+    /**
+     * Muestra el formulario para cambiar la fecha y duración de una cita.
+     */
+    public function editReschedule(Appointment $appointment): View
+    {
+        Gate::authorize('reschedule', $appointment);
+
+        return view('appointments.reschedule', [
+            'appointment' => $appointment->load(['patient', 'doctor']),
+        ]);
+    }
+
+    /**
+     * Cambia la fecha y duración sin modificar el resto de datos de la cita.
+     */
+    public function updateReschedule(
+        RescheduleAppointmentRequest $request,
+        Appointment $appointment,
+        AppointmentService $service,
+    ): RedirectResponse {
+        $data = $request->validated();
+        $service->reschedule(
+            $appointment,
+            Carbon::parse((string) $data['start_time']),
+            (int) $data['duration_minutes'],
+        );
+
+        return redirect()
+            ->route('appointments.index')
+            ->with('status', 'Cita reprogramada correctamente.');
+    }
+
+    /**
+     * Muestra la confirmación de cancelación sin modificar la cita.
+     */
+    public function confirmCancellation(Appointment $appointment): View
+    {
+        Gate::authorize('cancel', $appointment);
+
+        return view('appointments.cancel', [
+            'appointment' => $appointment->load(['patient', 'doctor']),
+        ]);
+    }
+
+    /**
+     * Cancela la cita y guarda opcionalmente una nota.
+     */
+    public function cancel(
+        CancelAppointmentRequest $request,
+        Appointment $appointment,
+        AppointmentService $service,
+    ): RedirectResponse {
+        $data = $request->validated();
+        $note = isset($data['cancellation_note']) ? (string) $data['cancellation_note'] : null;
+
+        $service->cancel($appointment, $note);
+
+        return redirect()
+            ->route('appointments.index')
+            ->with('status', 'Cita cancelada correctamente.');
     }
 }
