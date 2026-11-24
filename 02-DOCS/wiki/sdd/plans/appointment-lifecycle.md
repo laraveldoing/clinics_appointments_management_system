@@ -14,7 +14,7 @@ branch: feature/reschedule-cancel-appointments
 
 > Spec: [../specs/appointment-lifecycle.md](../specs/appointment-lifecycle.md) ·
 > Constitution: [../constitution.md](../constitution.md) · Status: implemented
-> Last updated: 2026-11-23
+> Last updated: 2026-11-24
 
 ## 0. Global Constraints
 
@@ -38,13 +38,13 @@ branch: feature/reschedule-cancel-appointments
   acatamiento).”
 - **Authorization:** “La autenticación y autorización se hacen con el paquete de Laravel/Auth (o el
   elegido) + *policies* y *gates*; no lógica de permisos dispersa en controladores.”
-- **Branching:** the PHPStan prerequisite is a separate PR from `main`; this feature branch is
-  stacked on that prerequisite and will target it until it merges. No direct pushes to `main`.
+- **Branching:** PHPStan prerequisite PR #14 is merged into `main`. This delivery branch is based
+  directly on updated `main`; its PR also targets `main`. No direct pushes to `main`.
 - **Quality:** “El código está formateado y linter-clean en cada *commit* (`pint`, cero
   advertencias).” “Las pruebas (Pest/PHPUnit) cierran el *merge*: rojo→verde→refactorizar,
   cobertura mínima por línea de código cambiada.”
-- **Static analysis:** `composer analyse` must report zero errors. The feature PR depends on the
-  separate PHPStan quality-gate PR.
+- **Static analysis:** `composer analyse` must report zero errors. The gate is already present in
+  `main` through PR #14.
 - **Database:** PostgreSQL 16 es la base local; CI usa SQLite en memoria.
 
 ## 1. Context & constraints
@@ -57,8 +57,8 @@ branch: feature/reschedule-cancel-appointments
   el acceso de solo lectura de los doctores.
 - La constitución requiere Form Requests para autorización/validación, servicios para lógica de
   negocio, políticas centralizadas, pruebas y formato limpio.
-- La puerta de PHPStan se prepara en el PR prerequisite `chore/phpstan-quality-gate`; esta rama
-  hereda el gate para cumplir la constitución sin mezclar su implementación con el ciclo de citas.
+- La puerta de PHPStan llegó a `main` mediante el PR prerequisite #14; esta rama parte de ese `main`
+  para cumplir la constitución sin repetir la implementación del gate.
 - La cancelación no borra filas ni añade un historial completo; su nota se limita a 500 caracteres.
 - La CI actual ejecuta PHPUnit sobre SQLite y Pint. SQLite no permite probar los bloqueos de fila
   de PostgreSQL.
@@ -276,7 +276,7 @@ optional `cancellation_note`. Neither request can alter `clinic_id`, `patient_id
 | Estimated changed lines | 300–450 | Shared lifecycle service, two requests, one migration, list/forms, focused tests and docs |
 | Files / areas | 12–16 | Controller, service, policy, requests, model, migration, routes, Blade, tests and SDD docs |
 | Risk | Max tier 2; 1 tier-2 task | T004 adds a database migration and changes clinic appointment state |
-| Suggested delivery | Two stacked PRs | PHPStan prerequisite first, then this feature; human merge approval remains mandatory |
+| Suggested delivery | One PR to `main` | PHPStan prerequisite #14 is already merged; human merge approval remains mandatory |
 
 ## Implementation evidence
 

@@ -1,21 +1,21 @@
 ---
 type: analysis
-title: Análisis pre-implementación — appointment-lifecycle
-description: Consistencia entre la constitución, la spec y el plan de ciclo de vida de citas.
+title: Análisis — appointment-lifecycle
+description: Consistencia entre la constitución, la spec, el plan y la implementación del ciclo de vida de citas.
 timestamp: 2026-11-20T19:47:30Z
 topic: sdd
 slug: appointment-lifecycle
 status: pass
 ---
 
-# Análisis pre-implementación — Reprogramar y cancelar citas
+# Análisis — Reprogramar y cancelar citas
 
 > Spec: [../specs/appointment-lifecycle.md](../specs/appointment-lifecycle.md) ·
 > Plan y tareas: [../plans/appointment-lifecycle.md](../plans/appointment-lifecycle.md)
 
 ## Veredicto
 
-**GATE: PASS — 0 open blockers.** PHPStan se resuelve mediante un PR prerequisite separado, la spec
+**GATE: PASS — 0 open blockers.** PHPStan ya está integrado en `main` mediante el PR #14, la spec
 define el resultado de abandonar la confirmación y la implementación verificada cubre la
 concurrencia en PostgreSQL.
 
@@ -42,7 +42,7 @@ en la creación y reprogramación evita duplicación y mantiene el criterio apro
 
 | # | Severity | Type | Artifact A | Artifact B | Finding | Resolution |
 | --- | --- | --- | --- | --- | --- | --- |
-| F1 | CRITICAL | Constitution compliance | [constitution.md](../constitution.md), §2 y Definition of Done | [plan](../plans/appointment-lifecycle.md), §5 y T007; `composer.json`; `.github/workflows/ci.yml` | La constitución exige PHPStan sin errores antes del merge. | Resuelto mediante el PR prerequisite `chore/phpstan-quality-gate`; `composer analyse` pasa en la rama apilada y CI lo ejecuta. |
+| F1 | CRITICAL | Constitution compliance | [constitution.md](../constitution.md), §2 y Definition of Done | [plan](../plans/appointment-lifecycle.md), §5 y T007; `composer.json`; `.github/workflows/ci.yml` | La constitución exige PHPStan sin errores antes del merge. | Resuelto: el PR prerequisite #14 se integró en `main`; `composer analyse` pasa y CI lo ejecuta. |
 | F2 | MEDIUM | Ambiguity | [spec](../specs/appointment-lifecycle.md), “What result they get” y “Clarifications” | [plan](../plans/appointment-lifecycle.md), §5 y T005 | No se definía el resultado de abandonar la confirmación. | Resuelto: la spec exige que abandonar conserve la cita y no guarde la nota. |
 
 ### Por qué importa
@@ -52,7 +52,7 @@ en la creación y reprogramación evita duplicación y mantiene el criterio apro
 
 ## Resultado de los seis análisis
 
-1. **Constitución:** PHPStan forma parte del PR prerequisite y la feature se apila sobre él. Las
+1. **Constitución:** PHPStan ya forma parte de `main`. Las
    capas y la autorización propuestas respetan las reglas de Policies, Form Requests y servicio.
 2. **Cobertura:** los once criterios tienen al menos una tarea; no hay `GAP`.
 3. **Deriva de alcance:** no se encontró `DRIFT`. El refactor de disponibilidad y la nota opcional
@@ -65,9 +65,9 @@ en la creación y reprogramación evita duplicación y mantiene el criterio apro
 
 ## Resoluciones
 
-- **F1 — PHPStan:** se autorizó y preparó como PR prerequisite separado para mantener el cambio de
-  calidad aislado; sus commits `02964b9`, `7369e37` y `e5e0b94` están verificados. El PR de citas se
-  apila sobre esa rama y debe integrarse después del prerequisite.
+- **F1 — PHPStan:** se preparó como PR prerequisite separado para mantener el cambio de calidad
+  aislado; el PR #14 y sus commits ya están integrados en `main`. El nuevo PR de ciclo de citas se
+  basa directamente en `main`.
 - **F2 — Confirmación:** la spec y el plan ya fijan que abandonar la confirmación no modifica la
   cita ni guarda la nota.
 
