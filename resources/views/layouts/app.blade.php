@@ -37,5 +37,14 @@
 
             @yield('content')
         </div>
+        @if ($errors->any())
+            <script>
+                (() => {
+                    const target = document.querySelector('[aria-invalid="true"]')
+                        ?? document.querySelector('[data-error-summary]');
+                    target?.focus();
+                })();
+            </script>
+        @endif
     </body>
 </html>

@@ -128,12 +128,20 @@ class AppointmentCancellationTest extends TestCase
     public function test_cancellation_note_is_limited_to_500_characters(): void
     {
         [, $receptionist, , , $appointment] = $this->appointmentContext();
+        $path = "/appointments/{$appointment->id}/cancel";
 
-        $this->actingAs($receptionist)
-            ->post("/appointments/{$appointment->id}/cancel", [
+        $response = $this->actingAs($receptionist)
+            ->from($path)
+            ->followingRedirects()
+            ->post($path, [
                 'cancellation_note' => str_repeat('a', 501),
-            ])
-            ->assertSessionHasErrors('cancellation_note');
+            ]);
+
+        $response->assertOk();
+        $response->assertSee('aria-invalid="true"', false);
+        $response->assertSee('aria-describedby="cancellation_note-error"', false);
+        $response->assertSee('id="cancellation_note-error"', false);
+        $response->assertSee('data-error-summary', false);
 
         $this->assertDatabaseHas('appointments', [
             'id' => $appointment->id,

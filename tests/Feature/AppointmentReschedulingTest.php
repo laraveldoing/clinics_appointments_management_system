@@ -61,6 +61,26 @@ class AppointmentReschedulingTest extends TestCase
         ]);
     }
 
+    public function test_validation_error_is_associated_with_its_form_field(): void
+    {
+        [, $receptionist, , , $appointment] = $this->appointmentContext();
+        $path = "/appointments/{$appointment->id}/reschedule";
+
+        $response = $this->actingAs($receptionist)
+            ->from($path)
+            ->followingRedirects()
+            ->put($path, [
+                'start_time' => now()->subDay()->format('Y-m-d\TH:i'),
+                'duration_minutes' => 30,
+            ]);
+
+        $response->assertOk();
+        $response->assertSee('aria-invalid="true"', false);
+        $response->assertSee('aria-describedby="start_time-error"', false);
+        $response->assertSee('id="start_time-error"', false);
+        $response->assertSee('data-error-summary', false);
+    }
+
     #[DataProvider('conflictingResources')]
     public function test_rescheduling_conflicts_leave_the_original_appointment_unchanged(string $conflict): void
     {
