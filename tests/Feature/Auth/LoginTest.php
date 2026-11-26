@@ -17,6 +17,10 @@ class LoginTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Iniciar sesión');
+        $response->assertSee('<html lang="es">', false);
+        $response->assertDontSee('aria-invalid', false);
+        $response->assertDontSee('data-error-summary', false);
+        $response->assertDontSee('document.querySelector', false);
     }
 
     public function test_users_can_authenticate_with_valid_credentials(): void
@@ -42,16 +46,32 @@ class LoginTest extends TestCase
             'password' => 'secret-password',
         ]);
 
-        $response = $this->from('/login')->post('/login', [
+        $response = $this->from('/login')->followingRedirects()->post('/login', [
             'email' => 'doctor@clinica.test',
             'password' => 'wrong-password',
         ]);
 
-        $response->assertRedirect('/login');
-        $response->assertSessionHasErrors([
-            'email' => 'Las credenciales no coinciden con nuestros registros.',
+        $response->assertOk();
+        $response->assertSee('Las credenciales no coinciden con nuestros registros.');
+        $response->assertSee('aria-invalid="true"', false);
+        $response->assertSee('aria-describedby="email-error"', false);
+        $response->assertSee('id="email-error"', false);
+        $response->assertSee('value="doctor@clinica.test"', false);
+        $this->assertGuest();
+    }
+
+    public function test_password_validation_error_is_associated_with_its_field(): void
+    {
+        $response = $this->from('/login')->followingRedirects()->post('/login', [
+            'email' => 'doctor@clinica.test',
+            'password' => '',
         ]);
-        $response->assertSessionHasInput('email', 'doctor@clinica.test');
+
+        $response->assertOk();
+        $response->assertSee('Indica tu contraseña.');
+        $response->assertSee('aria-invalid="true"', false);
+        $response->assertSee('aria-describedby="password-error"', false);
+        $response->assertSee('id="password-error"', false);
         $this->assertGuest();
     }
 

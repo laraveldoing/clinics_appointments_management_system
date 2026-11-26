@@ -12,6 +12,9 @@
 - [Plan: puerta PHPStan](./sdd/plans/phpstan-quality-gate.md)
 - [Análisis: puerta PHPStan](./sdd/analysis/phpstan-quality-gate.md)
 - [Spec: reprogramar y cancelar citas](./sdd/specs/appointment-lifecycle.md)
+- [Spec: idioma español y errores accesibles en formularios](./sdd/specs/spanish-language-accessible-form-errors.md)
+- [Plan: idioma español y errores accesibles en formularios](./sdd/plans/spanish-language-accessible-form-errors.md)
+- [Análisis: idioma español y errores accesibles en formularios](./sdd/analysis/spanish-language-accessible-form-errors.md)
 - [Plan: reprogramar y cancelar citas](./sdd/plans/appointment-lifecycle.md)
 - [Análisis: reprogramar y cancelar citas](./sdd/analysis/appointment-lifecycle.md)
 - [Spec: integración continua](./sdd/specs/ci.md)
@@ -22,3 +25,7 @@
 - [Spec: actualización de dependencias vulnerables](./sdd/specs/security-dependency-updates.md)
 - [Plan: actualización de dependencias vulnerables](./sdd/plans/security-dependency-updates.md)
 - [Análisis: actualización de dependencias vulnerables](./sdd/analysis/security-dependency-updates.md)
+
+## ftd/
+
+- [Idioma español y errores accesibles en formularios](./ftd/spanish-language-accessible-form-errors.md)

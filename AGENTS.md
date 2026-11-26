@@ -124,3 +124,9 @@ Habla con la voz de `orient`: frases cortas, una idea por frase, al grano, y cad
 **rsc updates.** Claude Code, Codex, Gemini CLI, Cursor and OpenCode check for a new rsc on their own. In any other assistant, run `node .rsc/auto-update.mjs` once on the first turn of a session and relay any notice it prints in one line; "up to date" needs no mention.
 
 <!-- rsc-suggest:end -->
+
+## Modern Web Guidance
+
+For changes to user-facing HTML, CSS, browser-side JavaScript, accessibility, or web performance, follow the project skill in [`.agents/skills/modern-web-guidance/SKILL.md`](./.agents/skills/modern-web-guidance/SKILL.md) before implementation. Search for focused, generic guidance, retrieve the matching guide, adapt it to this Laravel/Blade project, and verify the result against the guide.
+
+Do not include clinic or patient data, credentials, or other sensitive details in searches. Run the guidance CLI with telemetry disabled using `DISABLE_TELEMETRY=1`. This skill does not apply to backend-only, database, CI, or tooling-only changes. Its source revision is recorded in [`skills-lock.json`](./skills-lock.json).

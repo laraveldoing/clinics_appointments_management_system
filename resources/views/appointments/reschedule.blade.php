@@ -10,7 +10,7 @@
         </div>
 
         @if ($errors->any())
-            <div role="alert" style="background:#fef2f2;color:#991b1b;border-radius:.375rem;padding:.75rem;margin-bottom:1rem;">
+            <div role="alert" tabindex="-1" data-error-summary style="background:#fef2f2;color:#991b1b;border-radius:.375rem;padding:.75rem;margin-bottom:1rem;">
                 Revisa los campos marcados.
                 @error('appointment')
                     <p style="margin:.25rem 0 0;">{{ $message }}</p>
@@ -40,16 +40,17 @@
                         type="datetime-local"
                         value="{{ old('start_time', $appointment->start_time->format('Y-m-d\TH:i')) }}"
                         required
+                        @error('start_time') aria-invalid="true" aria-describedby="start_time-error" @enderror
                         style="width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:.375rem;padding:.5rem;"
                     >
                     @error('start_time')
-                        <p style="color:#b91c1c;font-size:.8125rem;margin:.25rem 0 0;">{{ $message }}</p>
+                        <p id="start_time-error" style="color:#b91c1c;font-size:.8125rem;margin:.25rem 0 0;">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
                     <label for="duration_minutes" style="display:block;font-size:.875rem;font-weight:500;margin-bottom:.25rem;">Duración</label>
-                    <select id="duration_minutes" name="duration_minutes" required style="width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:.375rem;padding:.5rem;">
+                    <select id="duration_minutes" name="duration_minutes" required @error('duration_minutes') aria-invalid="true" aria-describedby="duration_minutes-error" @enderror style="width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:.375rem;padding:.5rem;">
                         @foreach ([15, 30, 45, 60, 90] as $minutes)
                             <option value="{{ $minutes }}" @selected(old('duration_minutes', $appointment->start_time->diffInMinutes($appointment->end_time)) == $minutes)>
                                 {{ $minutes }} minutos
@@ -57,7 +58,7 @@
                         @endforeach
                     </select>
                     @error('duration_minutes')
-                        <p style="color:#b91c1c;font-size:.8125rem;margin:.25rem 0 0;">{{ $message }}</p>
+                        <p id="duration_minutes-error" style="color:#b91c1c;font-size:.8125rem;margin:.25rem 0 0;">{{ $message }}</p>
                     @enderror
                 </div>
             </div>

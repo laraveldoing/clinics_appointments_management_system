@@ -77,6 +77,29 @@ class CreateAppointmentTest extends TestCase
         ]);
     }
 
+    public function test_validation_error_is_associated_with_its_form_field(): void
+    {
+        $clinic = Clinic::factory()->create();
+        $user = User::factory()->receptionist()->for($clinic)->create();
+        $doctor = User::factory()->doctor()->for($clinic)->create();
+
+        $response = $this->actingAs($user)
+            ->from('/appointments/create')
+            ->followingRedirects()
+            ->post('/appointments', [
+                'patient_id' => '',
+                'user_id' => $doctor->id,
+                'start_time' => now()->addDay()->format('Y-m-d\TH:i'),
+                'duration_minutes' => 30,
+            ]);
+
+        $response->assertOk();
+        $response->assertSee('aria-invalid="true"', false);
+        $response->assertSee('aria-describedby="patient_id-error"', false);
+        $response->assertSee('id="patient_id-error"', false);
+        $response->assertSee('data-error-summary', false);
+    }
+
     public function test_patient_from_another_clinic_is_rejected(): void
     {
         $clinic = Clinic::factory()->create();

@@ -12,7 +12,7 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
     },
     webServer: {
-        command: "rm -f /tmp/clinics-e2e.sqlite && touch /tmp/clinics-e2e.sqlite && export APP_ENV=testing APP_KEY='base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=' DB_CONNECTION=sqlite DB_DATABASE=/tmp/clinics-e2e.sqlite SESSION_DRIVER=file CACHE_STORE=array QUEUE_CONNECTION=sync && php artisan migrate:fresh --seed --force && php artisan serve --host=127.0.0.1 --port=8000",
+        command: "rm -f /tmp/clinics-e2e.sqlite && touch /tmp/clinics-e2e.sqlite && export APP_ENV=testing APP_KEY='base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=' APP_LOCALE=es DB_CONNECTION=sqlite DB_DATABASE=/tmp/clinics-e2e.sqlite SESSION_DRIVER=file CACHE_STORE=array QUEUE_CONNECTION=sync && php artisan migrate:fresh --seed --force && php artisan serve --host=127.0.0.1 --port=8000",
         url: 'http://127.0.0.1:8000/login',
         reuseExistingServer: false,
         timeout: 120_000,

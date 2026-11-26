@@ -23,7 +23,7 @@
         </dl>
 
         @if ($errors->any())
-            <div role="alert" style="background:#fef2f2;color:#991b1b;border-radius:.375rem;padding:.75rem;margin-bottom:1rem;">
+            <div role="alert" tabindex="-1" data-error-summary style="background:#fef2f2;color:#991b1b;border-radius:.375rem;padding:.75rem;margin-bottom:1rem;">
                 Revisa la nota de cancelación.
                 @error('appointment')
                     <p style="margin:.25rem 0 0;">{{ $message }}</p>
@@ -41,10 +41,11 @@
                     name="cancellation_note"
                     rows="3"
                     maxlength="500"
+                    @error('cancellation_note') aria-invalid="true" aria-describedby="cancellation_note-error" @enderror
                     style="width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:.375rem;padding:.5rem;"
                 >{{ old('cancellation_note') }}</textarea>
                 @error('cancellation_note')
-                    <p style="color:#b91c1c;font-size:.8125rem;margin:.25rem 0 0;">{{ $message }}</p>
+                    <p id="cancellation_note-error" style="color:#b91c1c;font-size:.8125rem;margin:.25rem 0 0;">{{ $message }}</p>
                 @enderror
             </div>
 
